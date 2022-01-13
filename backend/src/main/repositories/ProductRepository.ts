@@ -3,6 +3,7 @@ import { ProductCreationDTO, ProductUpdateDTO } from '../dto/ProductDTOs';
 import { CRUD } from './CRUDInterface';
 import { Product } from '../models/Product';
 
+// Database queries are defined here using sequelize
 @injectable()
 export default class ProductRepository implements CRUD {
     constructor() {
@@ -19,22 +20,12 @@ export default class ProductRepository implements CRUD {
         }
     };
 
-    public delete = async (id: number): Promise<number> => {
-        try {
-            const deleteProductStatus = await Product.destroy({
-                where: { id: id },
-            });
-
-            return Promise.resolve(deleteProductStatus);
-        } catch (err: any) {
-            return Promise.resolve(err);
-        }
-    };
-
     public update = async (id: number, updatedValue: ProductUpdateDTO): Promise<number> => {
         try {
             await Product.update(updatedValue, {
-                where: { id: id }
+                where: {
+                    id: id
+                }
             });
 
             return Promise.resolve(1);
@@ -53,15 +44,15 @@ export default class ProductRepository implements CRUD {
         }
     };
 
-    public getAllProductWithName = async (name: string): Promise<Product[]> => {
+    public getAllProductsWithName = async (name: string): Promise<Product[]> => {
         try {
-            const products = await Product.findAll({
+            const productsWithName = await Product.findAll({
                 where: {
                     name: name,
                 },
             });
 
-            return Promise.resolve(products);
+            return Promise.resolve(productsWithName);
         } catch (err: any) {
             return Promise.reject(err);
         }
@@ -69,9 +60,9 @@ export default class ProductRepository implements CRUD {
 
     public getAll = async (): Promise<Product[]> => {
         try {
-            const products = await Product.findAll();
+            const allProducts = await Product.findAll();
 
-            return Promise.resolve(products);
+            return Promise.resolve(allProducts);
         } catch (err: any) {
             return Promise.reject(err);
         }

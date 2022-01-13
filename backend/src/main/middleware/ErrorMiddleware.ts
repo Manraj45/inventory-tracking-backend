@@ -2,6 +2,7 @@ import express from 'express';
 import { StatusCodes } from 'http-status-codes';
 import HttpException from '../exceptions/HttpException';
 
+// Http error handler
 const httpMiddlewareError = (
     error: HttpException,
     request: express.Request,
@@ -17,7 +18,7 @@ const httpMiddlewareError = (
     next();
 };
 
-// generic handler
+// Generic handler
 const failSafeHandler = (
     error: any | Error,
     request: express.Request,

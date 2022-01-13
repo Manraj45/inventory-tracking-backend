@@ -6,6 +6,8 @@ import { container } from 'tsyringe';
 import { httpMiddlewareError, failSafeHandler } from './middleware/ErrorMiddleware';
 import { sequelize } from './config/sequelize';
 import dotenv from 'dotenv';
+import { CommonRoutesConfig } from './routes/CommonRoutesConfig';
+import ProductRoute from './routes/ProductRoute';
 
 dotenv.config();
 
@@ -16,15 +18,19 @@ const main = async () => {
 
     const port = process.env.PORT || AppSettings.BACKEND_PORT;
 
+    const routes: Array<CommonRoutesConfig> = [];
+
     app.use(express.json());
 
     app.use(cors());
 
     // Registering express app to tsyringe. This allows it to be injected in other classes.
-    // For express-app i used "useFactory" instead of "useValue" because with useFactory you can't clear it.
     container.register<express.Application>('express-app', {
         useFactory: () => app,
     });
+
+    // Instanciating the routes here:
+    routes.push(container.resolve(ProductRoute));
 
     // Registering express error handling middleware
     app.use(httpMiddlewareError);

@@ -1,3 +1,5 @@
+// Configuration for sequelize
+// Enter your database information in the development section
 module.exports = {
     development: {
         username: 'root',

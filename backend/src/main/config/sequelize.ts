@@ -4,6 +4,7 @@ import path from 'path';
 
 dotenv.config();
 
+// Sequlize configuration for runtime
 export const sequelize = new Sequelize({
     database: process.env.DB_NAME,
     dialect: 'mysql',

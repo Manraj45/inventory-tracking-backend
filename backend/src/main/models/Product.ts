@@ -1,5 +1,6 @@
 import { Table, Column, Model, PrimaryKey, AutoIncrement, AllowNull } from 'sequelize-typescript';
 
+// Model of the Product table 
 @Table({ timestamps: false })
 export class Product extends Model {
     @PrimaryKey
@@ -21,8 +22,14 @@ export class Product extends Model {
     price!: number;
 
     @Column
+    quantity!: number;
+
+    @Column
     created_at!: Date;
 
     @Column
     modified_at!: Date;
+
+    @Column
+    deleted_at!: Date;
 }

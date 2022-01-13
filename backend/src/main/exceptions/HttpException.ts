@@ -1,6 +1,4 @@
-// Exception class to be use for http exception. \
-// If you need more customization, create new exception class and extend this one
-
+// Exception class to be use for http exception
 class HttpException extends Error {
     status: number;
     message: string;
