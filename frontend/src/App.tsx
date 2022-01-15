@@ -1,9 +1,8 @@
 import './App.css';
 import { ThemeProvider } from '@material-ui/core';
 import { mainTheme } from './configs/MuiConfig';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import React, { lazy, Suspense, useEffect } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
 import LandingPage from './components/Shared/LandingPage';
 
 const ViewProduct = lazy(() => import('./components/Product/ViewProduct'));
