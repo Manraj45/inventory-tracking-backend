@@ -25,7 +25,10 @@ export default class ProductRoute extends CommonRoutesConfig {
                 } catch (err) {
                     next(err);
                 }
-            })
+            });
+
+        this.getApp()
+            .route(`/products`)
             .get(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
                 try {
                     const allProducts = await this.productService.getAllProducts();
