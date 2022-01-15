@@ -1,5 +1,5 @@
 import axios, { AxiosPromise, AxiosResponse } from 'axios';
-import { ProductCreationDTO, ProductUpdateDTO, ProductDeleteDTO } from '../dto/ProductDTOs';
+import { ProductCreationDTO, ProductUpdateDTO } from '../dto/ProductDTOs';
 
 export const createProduct = async (productCreationDTO: ProductCreationDTO): Promise<AxiosResponse<any>> => {
     return axios.post(`/product`, productCreationDTO);
@@ -13,8 +13,8 @@ export const getProduct = async (productId: string): Promise<AxiosResponse<any>>
     return axios.get(`/product/${productId}`);
 };
 
-export const deleteProduct = async (productDeleteDTO: ProductDeleteDTO): Promise<AxiosPromise<any>> => {
-    return axios.delete(`/product/${productDeleteDTO.id}`);
+export const deleteProduct = async (productId: string): Promise<AxiosPromise<any>> => {
+    return axios.delete(`/product/${productId}`);
 };
 
 export const updateProduct = async (productUpdateDTO: ProductUpdateDTO): Promise<AxiosPromise<any>> => {

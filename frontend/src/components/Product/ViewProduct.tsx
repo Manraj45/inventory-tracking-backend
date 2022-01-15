@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { DataGrid, GridColDef, GridSelectionModel } from '@material-ui/data-grid';
 import { useEffect, useState } from 'react';
-import { getAllProducts } from '../../services/ProductAPI';
+import { AxiosResponse } from 'axios';
+import { getAllProducts, deleteProduct } from '../../services/ProductAPI';
 import { Button, Grid, Link } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Switch from '@material-ui/core/Switch';
@@ -35,10 +36,10 @@ interface DataDisplay {
 
 const ViewProduct: React.FC = () => {
   const [productList, setProductList] = useState<any>([]);
-  const [archivedProduct, setArchivedProduct] = useState<any>([]);
-  const [nonArchivedProduct, setNonArchivedProduct] = useState<any>([]);
+  const [deletedProduct, setDeletedProduct] = useState<any>([]);
+  const [nonDeletedProduct, setNonDeletedProduct] = useState<any>([]);
   const history = useHistory();
-  const [archived, setArchived] = useState<boolean>(false);
+  const [deleted, setDeleted] = useState<boolean>(false);
 
   const [select, setSelection] = useState<GridSelectionModel>();
   const handleRowSelection = (id: GridSelectionModel) => {
@@ -49,23 +50,30 @@ const ViewProduct: React.FC = () => {
     history.push('/product');
   };
 
+  const submitDelete = async (productId: string) => {
+    const response: AxiosResponse<any> = await deleteProduct(productId);
+    if (response.status === 200) {
+      history.push('/');
+    }
+  };
+
   const handleToggle = async () => {
-    setArchived(!archived);
+    setDeleted(!deleted);
   };
 
   useEffect(() => {
-    if (archived === true) {
-      setProductList(archivedProduct);
+    if (deleted === true) {
+      setProductList(deletedProduct);
     } else {
-      setProductList(nonArchivedProduct);
+      setProductList(nonDeletedProduct);
     }
-  }, [archived, archivedProduct, nonArchivedProduct]);
+  }, [deleted, deletedProduct, nonDeletedProduct]);
 
   useEffect(() => {
     const fetchData = async () => {
       const products = await getAllProducts();
-      const noArchived: DataDisplay[] = [];
-      const archivedProductList: DataDisplay[] = [];
+      const notDeletedProductList: DataDisplay[] = [];
+      const deletedProductList: DataDisplay[] = [];
       products.data.forEach((element: Data) => {
         const createdAtDate = element.created_at.split('T');
         const modifiedAtDate = element.modified_at.split('T');
@@ -84,14 +92,14 @@ const ViewProduct: React.FC = () => {
         };
 
         if (element.deleted_at != null) {
-            archivedProductList.unshift(dataDisplay);
+            deletedProductList.unshift(dataDisplay);
         } else {
-            noArchived.unshift(dataDisplay);
+            notDeletedProductList.unshift(dataDisplay);
         }
       });
 
-      setNonArchivedProduct(noArchived);
-      setArchivedProduct(archivedProductList);
+      setNonDeletedProduct(notDeletedProductList);
+      setDeletedProduct(deletedProductList);
     };
 
     fetchData();
@@ -166,7 +174,7 @@ const ViewProduct: React.FC = () => {
       editable: false,
       renderCell: (params: any) => {
         if(params.value.delete_at === null){
-            return <Link href={`/product/delete/${params.value.id}`}>Delete</Link>;
+            return <Link onClick={() => submitDelete(params.value.id)}>Delete</Link>;
         } else {
             return "";
         }
@@ -205,11 +213,11 @@ const ViewProduct: React.FC = () => {
             <FormControl component="fieldset">
               <FormGroup aria-label="position" row>
                 <FormControlLabel
-                  value="archived"
+                  value="deleted"
                   labelPlacement="start"
                   control={<Switch color="primary" />}
                   style={{ minWidth: '150px', marginBottom: 10, marginRight: 70, alignItems: 'right' }}
-                  label="View Archived Products"
+                  label="View Deleted Products"
                   onClick={() => handleToggle()}
                 />
               </FormGroup>

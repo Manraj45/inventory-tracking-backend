@@ -14,8 +14,3 @@ export interface ProductUpdateDTO {
     price?: number;
     quantity?: number;
 }
-
-export interface ProductDeleteDTO {
-    id: number;
-    deleted_at?: Date;
-}
