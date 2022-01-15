@@ -4,9 +4,6 @@ export interface ProductCreationDTO {
     sku: string;
     price: number;
     quantity: number;
-    created_at: Date;
-    modified_at: Date;
-    deleted_at?: Date;
 }
 
 export interface ProductUpdateDTO {
@@ -14,10 +11,8 @@ export interface ProductUpdateDTO {
     name?: string;
     desc?: string;
     sku?: string;
-    price?: string;
-    created_at?: Date;
-    modified_at?: Date;
-    deleted_at?: Date;
+    price?: number;
+    quantity?: number;
 }
 
 export interface ProductDeleteDTO {

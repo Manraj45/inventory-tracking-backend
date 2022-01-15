@@ -10,7 +10,7 @@ export const getAllProducts = async (): Promise<AxiosResponse<any>> => {
 };
 
 export const getProduct = async (productId: string): Promise<AxiosResponse<any>> => {
-    return axios.get(`/projuct/${productId}`);
+    return axios.get(`/product/${productId}`);
 };
 
 export const deleteProduct = async (productDeleteDTO: ProductDeleteDTO): Promise<AxiosPromise<any>> => {

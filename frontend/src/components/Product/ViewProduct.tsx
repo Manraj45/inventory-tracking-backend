@@ -153,7 +153,7 @@ const ViewProduct: React.FC = () => {
       editable: false,
       renderCell: (params: any) => {
         if(params.value.delete_at === null){
-            return <Link href={`/product/edit/${params.value}?edit=false`}>Edit</Link>;
+            return <Link href={`/product/edit/${params.value.id}?edit=false`}>Edit</Link>;
         } else {
             return 'Deleted Date: ' + params.value.delete_at.split('T')[0];
         }
