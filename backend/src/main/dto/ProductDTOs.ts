@@ -13,7 +13,8 @@ export interface ProductUpdateDTO {
     name?: string;
     desc?: string;
     sku?: string;
-    price?: string;
+    price?: number;
+    quantity?: number;
     created_at?: Date;
     modified_at?: Date;
     deleted_at?: Date;

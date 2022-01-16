@@ -1,3 +1,4 @@
+import e from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { injectable } from 'tsyringe';
 import { ProductCreationDTO, ProductUpdateDTO, ProductDeleteDTO } from '../dto/ProductDTOs';
@@ -61,9 +62,19 @@ export class ProductService {
         productCreationDTO.modified_at = currentDate;
         productCreationDTO.deleted_at = undefined;
 
+        if (productCreationDTO.quantity != undefined) {
+            // Convert quantity to integer if it is the updated value
+            productCreationDTO.quantity = parseInt(String(productCreationDTO.quantity))
+        }
+
         // Throw error if there is a missing value
         if (ProductService.isThereNullValueProductCreationDTO(productCreationDTO)) {
             throw new HttpException(StatusCodes.BAD_REQUEST, 'Missing some values for product creation');
+        }
+
+        // Throw error if there is a negative value
+        if (ProductService.isThereNegativeValueProductCreationDTO(productCreationDTO)) {
+            throw new HttpException(StatusCodes.BAD_REQUEST, 'Enter a positive number for price and quantity');
         }
 
         const product: Product = await this.productRepository.create(productCreationDTO);
@@ -110,8 +121,23 @@ export class ProductService {
         const modifiedDate: Date = new Date();
         productUpdateDTO.modified_at = modifiedDate;
 
+        if (productUpdateDTO.quantity != undefined) {
+            // Convert quantity to integer if it is the updated value
+            productUpdateDTO.quantity = parseInt(String(productUpdateDTO.quantity))
+        }
+
         if (ProductService.isThereNullProductUpdateDTO(productUpdateDTO)) {
             throw new HttpException(StatusCodes.BAD_REQUEST, 'Missing some values for product update');
+        }
+
+        // Verify that the price is a positive number if updated
+        if (ProductService.isThereNegativeValuePriceProductUpdateDTO(productUpdateDTO)) {
+            throw new HttpException(StatusCodes.BAD_REQUEST, 'Enter a positive number for price update');
+        }
+
+        // Verify that the quantity is a positive number if updated
+        if (ProductService.isThereNegativeValueQuantityProductUpdateDTO(productUpdateDTO)) {
+            throw new HttpException(StatusCodes.BAD_REQUEST, 'Enter a positive integer for quantity update');
         }
 
         const updateProduct = await this.productRepository.update(
@@ -135,10 +161,21 @@ export class ProductService {
             productCreationDTO === undefined ||
             !productCreationDTO.name ||
             !productCreationDTO.sku ||
-            !productCreationDTO.price ||
-            !productCreationDTO.quantity ||
+            productCreationDTO.price === undefined ||
+            productCreationDTO.quantity === undefined ||
             !productCreationDTO.created_at ||
             !productCreationDTO.modified_at
+        ) {
+            return true;
+        }
+        return false;
+    };
+
+    // Verify if there is a negative number for price and quanity during creation
+    public static isThereNegativeValueProductCreationDTO = (productCreationDTO: ProductCreationDTO): boolean => {
+        if (
+            !(productCreationDTO.price > 0) ||
+            !(productCreationDTO.quantity > 0)
         ) {
             return true;
         }
@@ -154,6 +191,32 @@ export class ProductService {
             return true;
         }
         return false;
+    };
+
+    // Verify if there is a negative number for price during update
+    public static isThereNegativeValuePriceProductUpdateDTO = (productUpdateDTO: ProductUpdateDTO): boolean => {
+        if (productUpdateDTO.price != undefined) {
+            if (!(productUpdateDTO.price > 0)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    };
+
+    // Verify if there is a negative number for quanity during update
+    public static isThereNegativeValueQuantityProductUpdateDTO = (productUpdateDTO: ProductUpdateDTO): boolean => {
+        if (productUpdateDTO.quantity != undefined) {
+            if (!(productUpdateDTO.quantity > 0)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     };
 
     // Verify if there is a missing data for product deletion
