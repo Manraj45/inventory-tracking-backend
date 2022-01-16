@@ -74,6 +74,22 @@ export default class ProductRoute extends CommonRoutesConfig {
                 }
             );
 
+        this.getApp()
+            .route(`/download`)
+            .get(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+                try {
+                    const csv = await this.productService.exportDataToCSV();
+                    const date = new Date();
+                    const dateTime = date.toISOString()
+
+                    res.header('Content-Type', 'text/csv');
+                    res.attachment('All_Products-' + dateTime + ".csv");
+                    res.status(StatusCodes.OK).send(csv);
+                } catch (err) {
+                    next(err);
+                }
+            });
+
         return this.getApp();
     }
 }

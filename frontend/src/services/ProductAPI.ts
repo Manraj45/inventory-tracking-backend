@@ -20,3 +20,7 @@ export const deleteProduct = async (productId: string): Promise<AxiosPromise<any
 export const updateProduct = async (productUpdateDTO: ProductUpdateDTO): Promise<AxiosPromise<any>> => {
     return axios.put(`/product/${productUpdateDTO.id}`, productUpdateDTO);
 };
+
+export const downloadProduct = async (): Promise<AxiosPromise<any>> => {
+    return axios.get(`/download`);
+};

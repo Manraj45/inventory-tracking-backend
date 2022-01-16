@@ -4,10 +4,50 @@ import { ProductCreationDTO, ProductUpdateDTO, ProductDeleteDTO } from '../dto/P
 import HttpException from '../exceptions/HttpException';
 import { Product } from '../models/Product';
 import ProductRepository from '../repositories/ProductRepository';
+import { downloadResource } from '../utils/CSVExporter';
 
 // Backend logic for the different actions
 @injectable()
 export class ProductService {
+    private fields = [
+        {
+            label: 'ID',
+            value: 'id',
+        },
+        {
+            label: 'Name',
+            value: 'name',
+        },
+        {
+            label: 'Description',
+            value: 'desc',
+        },
+        {
+            label: 'SKU',
+            value: 'sku',
+        },
+        {
+            label: 'Price ($)',
+            value: 'price',
+        },
+        {
+            label: 'Quantity',
+            value: 'quantity',
+        },
+        {
+            label: 'Created Date',
+            value: 'created_at',
+        },
+        {
+            label: 'Modified Date',
+            value: 'modified_at',
+        },
+        {
+            label: 'Deleted Date',
+            value: 'deleted_at',
+        },
+    ]
+
     constructor(
         private productRepository: ProductRepository,
     ) {
@@ -73,6 +113,12 @@ export class ProductService {
 
         return Promise.resolve(updateProduct);
     };
+
+    public exportDataToCSV = async () => {
+        let data: Product[] = await this.productRepository.getAll();
+
+        return downloadResource(this.fields, data);
+    }
 
     public static isThereNullValueProductCreationDTO = (productCreationDTO: ProductCreationDTO): boolean => {
         if (

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DataGrid, GridColDef, GridSelectionModel } from '@material-ui/data-grid';
 import { useEffect, useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { getAllProducts, deleteProduct } from '../../services/ProductAPI';
+import { getAllProducts, deleteProduct, downloadProduct } from '../../services/ProductAPI';
 import { Button, Grid, Link } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Switch from '@material-ui/core/Switch';
@@ -50,8 +50,22 @@ const ViewProduct: React.FC = () => {
     history.push('/product');
   };
 
+  const clickExportToCSV = async () => {
+    const response: AxiosResponse<any> = await downloadProduct();
+    const contentDisposition = response.request.getResponseHeader('Content-Disposition');
+    const filename = contentDisposition.match('filename="(.){1,}')[0].split('"')[1];
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+  };
+
   const submitDelete = async (productId: string) => {
     const response: AxiosResponse<any> = await deleteProduct(productId);
+    
     if (response.status === 200) {
       history.push('/');
     }
@@ -232,6 +246,19 @@ const ViewProduct: React.FC = () => {
               pageSize={8}
               onSelectionModelChange={handleRowSelection}
             />
+          </Grid>
+          <Grid item xs={4}></Grid>
+          <Grid item xs={4}></Grid>
+          <Grid item xs={4}>
+            <Button
+              variant="contained"
+              style={{ width: '150px', marginBottom: 10, marginRight: 5, alignItems: 'right' }}
+              color="primary"
+              component="span"
+              onClick={clickExportToCSV}
+            >
+              Export to CSV
+            </Button>
           </Grid>
         </Grid>
       </div>
