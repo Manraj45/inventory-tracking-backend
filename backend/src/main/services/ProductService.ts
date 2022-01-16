@@ -1,4 +1,3 @@
-import e from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { injectable } from 'tsyringe';
 import { ProductCreationDTO, ProductUpdateDTO, ProductDeleteDTO } from '../dto/ProductDTOs';
