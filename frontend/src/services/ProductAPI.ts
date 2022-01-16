@@ -21,6 +21,6 @@ export const updateProduct = async (productUpdateDTO: ProductUpdateDTO): Promise
     return axios.put(`/product/${productUpdateDTO.id}`, productUpdateDTO);
 };
 
-export const downloadProduct = async (): Promise<AxiosPromise<any>> => {
+export const downloadProducts = async (): Promise<AxiosPromise<any>> => {
     return axios.get(`/download`);
 };

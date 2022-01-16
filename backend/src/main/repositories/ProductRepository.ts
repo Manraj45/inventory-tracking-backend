@@ -9,6 +9,7 @@ export default class ProductRepository implements CRUD {
     constructor() {
     }
 
+    // Create product
     public create = async (productInfo: ProductCreationDTO): Promise<Product> => {
         try {
             const createdProduct = Product.build(productInfo);
@@ -20,6 +21,7 @@ export default class ProductRepository implements CRUD {
         }
     };
 
+    // Update and soft delete product
     public update = async (id: number, updatedValue: ProductUpdateDTO): Promise<number> => {
         try {
             await Product.update(updatedValue, {
@@ -34,6 +36,7 @@ export default class ProductRepository implements CRUD {
         }
     };
 
+    // Get a single product
     public get = async (id: number): Promise<Product | null> => {
         try {
             const product = await Product.findByPk(id);
@@ -44,6 +47,7 @@ export default class ProductRepository implements CRUD {
         }
     };
 
+    // Get a product by name
     public getAllProductsWithName = async (name: string): Promise<Product[]> => {
         try {
             const productsWithName = await Product.findAll({
@@ -58,6 +62,7 @@ export default class ProductRepository implements CRUD {
         }
     };
 
+    // Get all products
     public getAll = async (): Promise<Product[]> => {
         try {
             const allProducts = await Product.findAll();

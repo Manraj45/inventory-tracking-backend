@@ -18,7 +18,7 @@ const httpMiddlewareError = (
     next();
 };
 
-// Generic handler
+// Generic error handler
 const failSafeHandler = (
     error: any | Error,
     request: express.Request,

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DataGrid, GridColDef, GridSelectionModel } from '@material-ui/data-grid';
 import { useEffect, useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { getAllProducts, deleteProduct, downloadProduct } from '../../services/ProductAPI';
+import { getAllProducts, deleteProduct, downloadProducts } from '../../services/ProductAPI';
 import { Button, Grid, Link } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Switch from '@material-ui/core/Switch';
@@ -51,7 +51,7 @@ const ViewProduct: React.FC = () => {
   };
 
   const clickExportToCSV = async () => {
-    const response: AxiosResponse<any> = await downloadProduct();
+    const response: AxiosResponse<any> = await downloadProducts();
     const contentDisposition = response.request.getResponseHeader('Content-Disposition');
     const filename = contentDisposition.match('filename="(.){1,}')[0].split('"')[1];
     const url = window.URL.createObjectURL(new Blob([response.data]));

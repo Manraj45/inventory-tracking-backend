@@ -4,7 +4,7 @@ import { ProductCreationDTO, ProductUpdateDTO, ProductDeleteDTO } from '../dto/P
 import HttpException from '../exceptions/HttpException';
 import { Product } from '../models/Product';
 import ProductRepository from '../repositories/ProductRepository';
-import { downloadResource } from '../utils/CSVExporter';
+import { exportDataToCSV } from '../utils/CSVExporter';
 
 // Backend logic for the different actions
 @injectable()
@@ -53,14 +53,17 @@ export class ProductService {
     ) {
     }
 
+    // Create product
     public createProduct = async (productCreationDTO: ProductCreationDTO): Promise<Product> => {
+        // Set create, modified and deleted date
         const currentDate: Date = new Date();
         productCreationDTO.created_at = currentDate;
         productCreationDTO.modified_at = currentDate;
         productCreationDTO.deleted_at = undefined;
 
+        // Throw error if there is a missing value
         if (ProductService.isThereNullValueProductCreationDTO(productCreationDTO)) {
-            throw new HttpException(StatusCodes.BAD_REQUEST, 'Request data is missing some values');
+            throw new HttpException(StatusCodes.BAD_REQUEST, 'Missing some values for product creation');
         }
 
         const product: Product = await this.productRepository.create(productCreationDTO);
@@ -68,17 +71,19 @@ export class ProductService {
         return Promise.resolve(product);
     };
 
+    // Get a specific product
     public getProduct = async (id: number): Promise<Product | null> => {
         return this.productRepository.get(id);
     };
 
+    // Soft delete a product
     public deleteProduct = async (id: number, productDeleteDTO: ProductDeleteDTO): Promise<number> => {
+        // Set deleted date
         const deletedDate: Date = new Date();
-
         productDeleteDTO.deleted_at = deletedDate;
 
         if (ProductService.isThereNullProductDeleteDTO(productDeleteDTO)) {
-            throw new HttpException(StatusCodes.BAD_REQUEST, 'Request data is missing some values');
+            throw new HttpException(StatusCodes.BAD_REQUEST, 'Missing some values for product deletion');
         }
 
         const deleteProduct = await this.productRepository.update(
@@ -89,21 +94,24 @@ export class ProductService {
         return Promise.resolve(1);
     };
 
+    // Get a product by name
     public getAllProductsWithName = async (name: string): Promise<Product[] | null> => {
         return this.productRepository.getAllProductsWithName(name);
     };
 
+    // Get all products
     public getAllProducts = async (): Promise<Product[] | null> => {
         return this.productRepository.getAll();
     };
 
+    // Update a specific product
     public updateProduct = async (id: number, productUpdateDTO: ProductUpdateDTO): Promise<number> => {
+        // Set modified date
         const modifiedDate: Date = new Date();
-
         productUpdateDTO.modified_at = modifiedDate;
 
         if (ProductService.isThereNullProductUpdateDTO(productUpdateDTO)) {
-            throw new HttpException(StatusCodes.BAD_REQUEST, 'Request data is missing some values');
+            throw new HttpException(StatusCodes.BAD_REQUEST, 'Missing some values for product update');
         }
 
         const updateProduct = await this.productRepository.update(
@@ -114,12 +122,14 @@ export class ProductService {
         return Promise.resolve(updateProduct);
     };
 
-    public exportDataToCSV = async () => {
-        let data: Product[] = await this.productRepository.getAll();
+    // Export product data to csv
+    public exportProductsToCSV = async () => {
+        const data: Product[] = await this.productRepository.getAll();
 
-        return downloadResource(this.fields, data);
+        return exportDataToCSV(this.fields, data);
     }
 
+    // Verify if there is a missing data for product creation
     public static isThereNullValueProductCreationDTO = (productCreationDTO: ProductCreationDTO): boolean => {
         if (
             productCreationDTO === undefined ||
@@ -135,6 +145,7 @@ export class ProductService {
         return false;
     };
 
+    // Verify if there is a missing data for product update
     public static isThereNullProductUpdateDTO = (productUpdateDTO: ProductUpdateDTO): boolean => {
         if (
             productUpdateDTO === undefined ||
@@ -145,6 +156,7 @@ export class ProductService {
         return false;
     };
 
+    // Verify if there is a missing data for product deletion
     public static isThereNullProductDeleteDTO = (productDeleteDTO: ProductDeleteDTO): boolean => {
         if (
             productDeleteDTO === undefined ||
