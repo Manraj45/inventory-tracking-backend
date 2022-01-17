@@ -1,7 +1,7 @@
 # Inventory Tracking by Manraj Rai
 
 ## Prerequisites:
-- NodeJS (12 or above)
+- NodeJS (16.13.2)
 - MySQL (Workbench)
 
 ## Technologies
