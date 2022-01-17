@@ -59,3 +59,49 @@ After, open two new terminals:
 - In the second terminal: Navigate to the project root directory (`inventory-tracking-backend/`), run `cd frontend`, and then run `npm start`
 
 The project should now be available at http://localhost:3000.
+
+## Demo
+### Create Product
+> In this page, you can create a new product.
+
+<img src="https://media.discordapp.net/attachments/484102130286854144/932677460720496640/Product_Creation.PNG">
+
+### View Product
+> In this page, you can view all products, redirect to the create new product page by clicking the "Add Product" button, and redirect to the edit product page by clicking the "Edit" button in the table row.
+
+<img src="https://media.discordapp.net/attachments/484102130286854144/932677461035077632/View_Product.PNG?width=1401&height=700">
+
+### Edit Product
+> In this page, you can edit an existing product by clicking the edit button.
+
+<img src="https://media.discordapp.net/attachments/484102130286854144/932677458770165790/Edit_product_1.PNG">
+
+<br/>
+
+<img src="https://media.discordapp.net/attachments/484102130286854144/932677459126657054/Edit_product_2.PNG">
+
+### Delete Product
+> You can delete a product by clicking the delete button in the table row.
+
+<img src="https://media.discordapp.net/attachments/484102130286854144/932677459353153546/Delete_Product_1.PNG?width=1407&height=701">
+
+<br/>
+
+<img src="https://media.discordapp.net/attachments/484102130286854144/932677459629965313/Delete_Product_2.PNG?width=1416&height=701">
+
+> You can view deleted products by clicking on the "View Deleted Products" toggle.
+
+<img src="https://media.discordapp.net/attachments/484102130286854144/932677459822907503/Delete_Product_3.PNG?width=1416&height=701">
+
+### Export Product Data To CSV
+> You can export all products information to a CSV by clicking the "Export to CSV" button.
+
+<img src="https://media.discordapp.net/attachments/484102130286854144/932677460028436490/Export_to_CSV_1.PNG?width=1386&height=700">
+
+<br/>
+
+<img src="https://media.discordapp.net/attachments/484102130286854144/932677460221390879/Export_to_CSV_2.PNG?width=1335&height=700">
+
+<br/>
+
+<img src="https://media.discordapp.net/attachments/484102130286854144/932677460494000158/Export_to_CSV_3.PNG">
