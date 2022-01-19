@@ -2,7 +2,7 @@
 
 ## Prerequisites:
 - NodeJS (16.13.2)
-- MySQL (Workbench)
+- MySQL 8 (Workbench)
 
 ## Technologies
 Backend:
@@ -14,6 +14,7 @@ Backend:
 
 Frontend:
  - React
+ - Material UI
 
 ## Project Setup
 1. Clone this repository
